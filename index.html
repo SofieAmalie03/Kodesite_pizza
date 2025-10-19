@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index,follow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/fav/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/fav/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/fav/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/fav/site.webmanifest" />
+
+    <!-- Playfair Display -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="generel.css" />
+    <link rel="stylesheet" href="layout.css" />
+
+    <!-- JS -->
+    <script src="menu.js" defer></script>
+
+    <title>Pizzaverse</title>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="site-header">
+      <a href="index.html" class="logo-badge" aria-label="Pizzaverse forside">
+        <img src="pizzavereselogo-kopi.png" alt="Pizzaverse logo" />
+      </a>
+
+      <nav class="site-nav">
+        <ul class="menu" id="primary-menu">
+          <li>
+            <button
+              id="opskrifterBtn"
+              class="menu-link"
+              aria-expanded="false"
+              aria-controls="opskrifterPanel"
+            >
+              Opkrifter
+            </button>
+          </li>
+          <li><a href="om.html">Om</a></li>
+
+          <li>
+            <button
+              id="loginBtn"
+              class="menu-link"
+              aria-expanded="false"
+              aria-controls="loginPanel"
+            >
+              Log ind
+            </button>
+          </li>
+
+          <li>
+            <a href="favoritter.html" class="heart" aria-label="Favoritter"
+              >♥</a
+            >
+          </li>
+        </ul>
+
+        <button
+          class="burger"
+          aria-label="Menu"
+          aria-expanded="false"
+          aria-controls="primary-menu"
+        >
+          <span class="line"></span><span class="line"></span
+          ><span class="line"></span>
+        </button>
+
+        <!-- Panel niveau 1 (Opkrifter) -->
+        <div
+          id="opskrifterPanel"
+          class="overlay-panel"
+          role="menu"
+          aria-labelledby="opskrifterBtn"
+        >
+          <ul>
+            <li><a role="menuitem" href="pizzadej.html">Pizzadej</a></li>
+            <li><a role="menuitem" href="#">Sunde pizzavalg</a></li>
+            <li><a role="menuitem" href="#">Step it up (hurtig)</a></li>
+            <li><a role="menuitem" href="#">Budgetvenlige</a></li>
+            <li>
+              <a id="raavarerLink" role="menuitem" href="#"
+                >De bedste råvarer</a
+              >
+            </li>
+            <li><a role="menuitem" href="#">Kreative & eksklusive</a></li>
+            <li><a role="menuitem" href="#">Dessertpizza</a></li>
+          </ul>
+        </div>
+
+        <!-- Panel niveau 2 (modal ovenpå niveau 1) -->
+        <div
+          id="raavarerPanel"
+          class="overlay-panel overlay-modal"
+          role="menu"
+          aria-hidden="true"
+        >
+          <ul>
+            <li>
+              <a role="menuitem" href="svtrpiz.html">Svampe & Trøffel Pizza</a>
+            </li>
+            <li><a role="menuitem" href="PaRa.html">Pancetta & Ramsløg</a></li>
+            <li>
+              <a role="menuitem" href="RiCi.html">Ricotta & Citron Pizza</a>
+            </li>
+            <li>
+              <a role="menuitem" href="MaBu.html">Margherita med Burrata</a>
+            </li>
+            <li><a role="menuitem" href="PrRu.html">Prosciutto & Rucola</a></li>
+          </ul>
+        </div>
+        <!-- LOGIN panel (overlay som modal) -->
+        <div
+          id="loginPanel"
+          class="overlay-panel overlay-modal"
+          role="dialog"
+          aria-labelledby="loginTitle"
+          aria-modal="true"
+          aria-hidden="true"
+        >
+          <h2 id="loginTitle" style="margin: 0 0 0.25rem">
+            Log ind i Pizzaverse
+          </h2>
+          <p style="opacity: 0.85; margin: 0 0 1rem">
+            Udfyld formularen nedenfor med din email og adgangskode.
+          </p>
+
+          <form class="login-form" novalidate>
+            <h3>Log ind i Pizzaverse</h3>
+            <p class="login-intro">
+              Udfyld formularen nedenfor med din email og adgangskode.
+            </p>
+
+            <label for="loginEmail">Brugernavn eller e-mailadresse</label>
+            <input
+              id="loginEmail"
+              type="email"
+              placeholder="fx: navn@mail.dk"
+              autocomplete="username"
+            />
+
+            <div class="field field--password">
+              <label for="loginPwd">Adgangskode</label>
+              <input
+                id="loginPwd"
+                type="password"
+                placeholder="••••••••"
+                autocomplete="current-password"
+              />
+              <a class="forgot" href="#">Glemt adgangskode?</a>
+            </div>
+
+            <label class="remember">
+              <input type="checkbox" id="rememberMe" />
+              Husk mig
+            </label>
+
+            <a class="signup" href="#">Tilmeld dig nu</a>
+
+            <button class="btn btn-block" type="submit">Log ind</button>
+          </form>
+        </div>
+      </nav>
+      <!-- Backdrop (mørk baggrund til niveau 2) -->
+      <div id="overlayBackdrop" class="overlay-backdrop" hidden></div>
+    </header>
+
+    <!-- HERO -->
+    <main>
+      <section
+        class="forside-baggrund"
+        style="--hero: url('pizzabaggrund1-kopi.png')"
+      >
+        <div class="hero-content">
+          <h1>PIZZA</h1>
+          <p class="hero-subtitle">
+            Den perfekte pizza kræver mere end blot en opskrift<br />
+            den kræver håndværk
+          </p>
+
+          <form
+            class="hero-search"
+            role="search"
+            action="opskrifter.html"
+            method="get"
+          >
+            <label class="sr-only" for="q">Søg efter opskrifter</label>
+            <span class="search-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <line
+                  x1="16.5"
+                  y1="16.5"
+                  x2="21"
+                  y2="21"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+            <input
+              id="q"
+              name="q"
+              type="search"
+              placeholder="Søg efter opskrifter her…"
+            />
+            <button type="submit" class="sr-only">Søg</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 Pizzaverse.dk | Alle rettigheder forbeholdes</p>
+      <a href="#" class="nyhedsbrev">Tilmeld Nyhedsbrev</a>
+    </footer>
+  </body>
+</html>

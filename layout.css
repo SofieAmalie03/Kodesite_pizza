@@ -1,0 +1,788 @@
+/* ===============================
+   Variabler
+=================================*/
+:root {
+  --header-h: 72px; /* header-højde (bruges til placering af paneler) */
+}
+
+/* ===============================
+       Header + logo
+    =================================*/
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: var(--header-h);
+  padding: 0 1.2rem;
+  padding-left: clamp(120px, 12vw, 180px); /* plads til logo */
+  background: var(--header);
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  overflow: visible; /* logo må “hænge” ud */
+}
+
+.logo-badge {
+  position: absolute;
+  left: clamp(12px, 2vw, 24px);
+  bottom: -150px; /* overlapper hero */
+  width: clamp(120px, 15vw, 200px);
+  aspect-ratio: 1 / 1;
+  z-index: 200;
+}
+.logo-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35));
+}
+
+/* ===============================
+       Navigation
+    =================================*/
+.site-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.menu a,
+.menu .menu-link {
+  color: var(--link);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font: inherit;
+}
+
+.menu a:hover,
+.menu .menu-link:hover,
+.menu a:focus-visible,
+.menu .menu-link:focus-visible {
+  color: var(--link-hover);
+}
+.menu a:active,
+.menu .menu-link:active {
+  color: var(--link-active);
+}
+
+/* Markér “Opkrifter” når panelet er åbent */
+#opskrifterBtn[aria-expanded="true"] {
+  color: var(--link-active) !important;
+}
+
+/* Burger */
+.burger {
+  display: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0.4rem;
+}
+.burger .line {
+  width: 28px;
+  height: 2px;
+  background: #fff;
+  display: block;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.burger .line + .line {
+  margin-top: 6px;
+}
+
+/* ===============================
+       Overlay niveau 1 (Opkrifter)
+       – panel under nav på desktop
+    =================================*/
+.overlay-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 280px;
+  padding: 12px 14px;
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  display: none;
+  z-index: 1200; /* over sideindhold */
+  max-height: 80vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.overlay-panel.open {
+  display: block;
+}
+
+.overlay-panel ul {
+  display: grid;
+  gap: 10px;
+}
+.overlay-panel a {
+  color: inherit;
+  padding: 8px 10px;
+  border-radius: 8px;
+  display: block;
+}
+.overlay-panel a:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* “De bedste råvarer” skal ligne et link */
+#raavarerLink {
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  padding: 8px 10px;
+  display: block;
+  border-radius: 8px;
+}
+#raavarerLink:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ===============================
+       Overlay niveau 2 som MODAL
+       + backdrop (mørk baggrund)
+    =================================*/
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+  z-index: 2000; /* UNDER modal, OVER alt andet */
+}
+.overlay-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-modal {
+  position: fixed;
+  left: 50%;
+  top: calc(var(--header-h) + 24px); /* under header */
+  transform: translateX(-50%);
+  width: min(460px, 92vw);
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  display: none;
+  z-index: 2002; /* over backdrop */
+  padding: 12px 14px;
+}
+.overlay-modal.open {
+  display: block;
+}
+
+/* Lås scroll når modal er åben */
+html.menu-open,
+html.menu-open body {
+  overflow: hidden;
+}
+
+/* ===============================
+       Hero (forside)
+    =================================*/
+.forside-baggrund {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--hero, url("pizzabaggrund1-kopi.png")) center / cover
+    no-repeat;
+  display: grid;
+  isolation: isolate;
+}
+.forside-baggrund::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 0;
+}
+
+.hero-content {
+  justify-self: center;
+  text-align: center;
+  margin-top: clamp(60px, 15vh, 220px);
+  max-width: min(1100px, 92vw);
+  z-index: 1;
+}
+
+.forside-baggrund h1 {
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  font-size: clamp(3.5rem, 12vw, 10rem);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  margin: 0 0 1rem;
+}
+
+.hero-subtitle {
+  font-weight: 400;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.35;
+  margin-bottom: 2rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.hero-search {
+  position: relative;
+  width: min(820px, 70vw);
+}
+.hero-search .search-icon {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b39b9b;
+  pointer-events: none;
+  transition: color 0.2s, transform 0.2s;
+}
+.hero-search input {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  padding: 1.1rem 1.5rem 1.1rem 3.25rem;
+  background: rgba(216, 189, 189, 0.95);
+  color: #3a2c2a;
+  font-size: clamp(1rem, 1.8vw, 1.6rem);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s, box-shadow 0.25s, border-color 0.2s;
+}
+.hero-search input::placeholder {
+  color: #6f5a5a;
+  opacity: 1;
+  transition: color 0.2s;
+}
+.hero-search:hover input {
+  background: rgba(245, 237, 237, 0.98);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+}
+.hero-search:focus-within input {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: var(--link-active);
+  box-shadow: 0 0 0 3px rgba(205, 186, 180, 0.35),
+    0 10px 28px rgba(0, 0, 0, 0.22);
+}
+.hero-search:hover .search-icon,
+.hero-search:focus-within .search-icon {
+  color: #3a2c2a;
+  transform: scale(1.08);
+}
+
+/* ===============================
+       Footer
+    =================================*/
+footer {
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  text-align: center;
+  padding: 1.5rem 0;
+}
+footer p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+footer .nyhedsbrev {
+  display: block;
+  margin-top: 0.5rem;
+  color: #3a2c2a;
+  letter-spacing: 0.2rem;
+  transition: color 0.3s;
+}
+footer .nyhedsbrev:hover {
+  color: #6a4c47;
+}
+
+/* ===============================
+       Pizzadej-side (sektioner/kort)
+    =================================*/
+.lede {
+  background: #cbb7b5;
+  padding: clamp(28px, 6vw, 56px) 0;
+  color: #2f2322;
+}
+.lede-inner {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: clamp(20px, 5vw, 48px);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.2rem;
+}
+.lede-text h1 {
+  color: #2f2322;
+  font-size: clamp(2rem, 5.2vw, 3.2rem);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.lede-kicker,
+.lede-sub {
+  color: #2f2322;
+  opacity: 0.85;
+}
+.lede-sub {
+  margin-bottom: 1rem;
+}
+.lede-image img {
+  width: 100%;
+  border-radius: 22px;
+}
+
+.section {
+  padding: clamp(32px, 7vw, 72px) 0;
+}
+.section--marble {
+  background: #efe7e2;
+}
+.section--alt {
+  background: #cbb7b5;
+}
+.section-head {
+  text-align: center;
+  margin-bottom: clamp(16px, 3vw, 24px);
+  color: #2f2322;
+}
+.section-head h2 {
+  font-size: clamp(1.6rem, 3.8vw, 2.2rem);
+}
+
+.cards {
+  display: grid;
+  gap: clamp(18px, 3vw, 28px);
+}
+.cards--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card {
+  text-align: center;
+  color: #2f2322;
+}
+.card img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 24px;
+  margin: 0 auto 1rem;
+}
+.card h3 {
+  margin-bottom: 0.35rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+}
+.card p {
+  opacity: 0.9;
+  max-width: 38ch;
+  margin: 0 auto 1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.65rem 1.1rem;
+  background: #dfcfce;
+  color: #2f2322;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  background: #b49d9b;
+}
+.btn--ghost {
+  background: #e5d7d6;
+}
+.gemfavrit {
+  display: inline-block;
+  padding: 0.65rem 1.1rem;
+  background: #dfcfce;
+  color: #2f2322;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.gemfavrit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  background: #b49d9b;
+}
+.gemfavrit {
+  background: #e5d7d6;
+}
+
+/* ===============================
+       Opskrift-side (svtrpiz)
+    =================================*/
+.recipe-hero {
+  background: #c6b9b1;
+  padding: clamp(24px, 6vw, 56px) 0;
+  color: #2f2322;
+}
+.recipe-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: clamp(20px, 4vw, 48px);
+  align-items: center;
+}
+.recipe-text h1 {
+  font-size: clamp(1.8rem, 4.8vw, 2.6rem);
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+.recipe-image img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.recipe-body {
+  padding: clamp(28px, 6vw, 64px) 0;
+}
+.recipe-columns {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: clamp(20px, 4vw, 48px);
+}
+.recipe-columns h2 {
+  color: #e7d7d5;
+  margin-bottom: 0.5rem;
+}
+.ingredients {
+  color: #e8d8d7;
+  opacity: 0.9;
+  display: grid;
+  gap: 0.35rem;
+  padding-left: 1rem;
+  list-style: disc inside;
+}
+.steps {
+  color: #ead4d2;
+  opacity: 0.95;
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1.25rem;
+}
+.ideas details {
+  margin-top: 1rem;
+  background: #d6b7af;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+}
+.ideas summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.comment {
+  background: #cbb7b5;
+  color: #2f2322;
+  padding: 1.25rem 0 2rem;
+}
+.comment-form {
+  display: grid;
+  gap: 0.6rem;
+}
+.comment-form textarea,
+.comment-form input {
+  background: #f1e7e5;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+/* Stjerne-rating */
+.rating-wrap {
+  margin: 0.5rem 0 1rem;
+}
+.rating-title {
+  margin: 0 0 0.25rem;
+  color: #eadedc;
+  font-weight: 700;
+}
+
+/* container: reverse rækkefølge så vi kan farve "alle til venstre" med ~ */
+.rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: 0.35rem;
+  line-height: 1;
+}
+
+/* skjul radioer, men bevar tilgængelighed */
+.rating input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* selve stjernen */
+.rating label {
+  cursor: pointer;
+  font-size: 2.2rem; /* størrelse på stjerner */
+  color: #9d7b5a; /* slukket/brunlig */
+  transition: color 0.18s ease, transform 0.12s ease;
+  user-select: none;
+}
+
+/* hover: den, og alle til venstre (pga. row-reverse) */
+.rating label:hover,
+.rating label:hover ~ label {
+  color: #d4af37; /* guld når man hover */
+  transform: translateY(-1px);
+}
+
+/* valgt (checked): farv den og alle til venstre */
+.rating input:checked ~ label {
+  color: #c8a600; /* guld når valgt */
+}
+
+/* tastatur-focus på den stjerne radioen repræsenterer */
+.rating input:focus + label {
+  outline: 2px solid #cdbab4;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.rating-value {
+  margin-left: 0.5rem;
+  color: #eadedc;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* ===============================
+       Responsiv
+    =================================*/
+@media (max-width: 980px) {
+  .lede-inner {
+    grid-template-columns: 1fr;
+  }
+  .lede-image {
+    order: -1;
+  }
+  .cards--3 {
+    grid-template-columns: 1fr;
+  }
+  .recipe-grid {
+    grid-template-columns: 1fr;
+  }
+  .recipe-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  /* burger vises */
+  .burger {
+    display: inline-block;
+  }
+  .site-header {
+    z-index: 999;
+  }
+
+  /* fold-ud fra burger */
+  .menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 230px;
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--header);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    z-index: 1000; /* UNDER vores overlay (2000+) */
+  }
+  .site-nav.active .menu {
+    display: flex;
+  }
+
+  /* burger -> kryds */
+  .burger.active .line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .burger.active .line:nth-child(2) {
+    opacity: 0;
+  }
+  .burger.active .line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* flyt niveau 1 (Opkrifter) ud som fixed så den ikke skjules */
+  #opskrifterPanel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: calc(var(--header-h) + 8px);
+    min-width: 0;
+    width: auto;
+    z-index: 2001; /* over burgerens dropdown */
+  }
+
+  /* modal lidt højere på mobil og næsten fuldbredde */
+  .overlay-modal {
+    top: calc(var(--header-h) + 20px);
+    width: calc(100vw - 24px);
+  }
+
+  /* logo større og længere ned i hero */
+  :root {
+    --header-h: 64px;
+  } /* lidt lavere header på mobil */
+  .site-header {
+    height: var(--header-h);
+  }
+  .logo-badge {
+    width: 160px;
+    bottom: -110px;
+    left: 14px;
+  }
+}
+
+/* Mindre bevægelse */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+/* ===== Login-panel (genbruger overlay-modal) ===== */
+.login-form {
+  display: grid;
+  gap: 0.8rem;
+}
+.login-label {
+  font-weight: 700;
+  color: var(--panel-text);
+}
+.login-input {
+  width: 100%;
+  background: #eee3e1;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  color: #2f2322;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08) inset;
+}
+.login-input::placeholder {
+  color: #8a7e7c;
+}
+.login-input:focus {
+  outline: 2px solid #cdbab4;
+  outline-offset: 2px;
+}
+
+.login-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.remember {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.login-links a {
+  color: var(--panel-text);
+  text-decoration: underline;
+}
+.login-links a:hover {
+  opacity: 0.8;
+}
+/* --- Login form layout --- */
+#loginPanel .login-form {
+  display: grid;
+  gap: 10px;
+}
+
+#loginPanel .login-form h3 {
+  margin: 0 0 2px;
+}
+
+#loginPanel .login-form .login-intro {
+  margin: 0 0 10px;
+  opacity: 0.9;
+}
+
+/* Ens spacing for felter */
+#loginPanel .login-form label {
+  font-weight: 700;
+  margin-top: 6px;
+}
+#loginPanel .login-form input[type="email"],
+#loginPanel .login-form input[type="password"] {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12) inset;
+}
+
+/* Password-felt med "glemt" lige under, højrejusteret */
+#loginPanel .field--password .forgot {
+  display: block;
+  text-align: right;
+  margin-top: 6px; /* tæt på feltet */
+  font-weight: 600;
+  text-decoration: none;
+}
+#loginPanel .field--password .forgot:hover {
+  text-decoration: underline;
+}
+
+/* Husk mig lige efter password-sektionen (højere oppe) */
+#loginPanel .remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 4px; /* lille afstand under "glemt" */
+  user-select: none;
+}
+
+/* "Tilmeld dig nu" lige over knappen, venstrejusteret */
+#loginPanel .signup {
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 700;
+  text-decoration: none;
+}
+#loginPanel .signup:hover {
+  text-decoration: underline;
+}
+
+/* Knap i fuld bredde, under signup-linket */
+#loginPanel .btn-block {
+  width: 100%;
+  margin-top: 6px;
+}
